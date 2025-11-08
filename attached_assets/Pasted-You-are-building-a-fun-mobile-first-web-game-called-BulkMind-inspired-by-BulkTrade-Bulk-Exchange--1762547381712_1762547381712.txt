@@ -1,0 +1,99 @@
+You are building a fun, mobile-first web game called BulkMind, inspired by BulkTrade (Bulk Exchange) — a decentralized perpetual futures exchange built on Solana, known for its unmatched on-chain speed, fairness, and transparency. BulkTrade’s goal is to merge the performance of centralized exchanges with the freedom of decentralized finance. Its tagline is “One Exchange, Infinite Markets.”
+
+🔍 Research First
+
+Before creating anything, study and understand the project deeply:
+
+BulkTrade X handle: https://x.com/bulktrade
+
+Official whitepaper: https://alphadocs.bulk.trade
+
+Use this knowledge to form the question bank that powers all three game modes. The questions and puzzle content should reflect BulkTrade’s technology, ecosystem, and general crypto/trading knowledge.
+
+🧠 Game Concept
+
+BulkMind is a web game that combines learning, speed, and fun. It’s designed to make players feel like fast, sharp traders in the Bulk ecosystem — thinking, reacting, and competing.
+It should be friendly, visually exciting, and deeply responsive on both desktop and mobile.
+
+Players only need to enter their name once, and it should automatically save on their browser or device. When they return, they go straight to choosing a mode.
+
+A welcome screen appears for first-time users where they type their name. Returning users skip this screen and can instantly play.
+
+🎮 Game Modes
+1. Word Puzzle
+
+Players rearrange scrambled letters to form Bulk- and crypto-related words.
+Each correct word advances them through levels, which become gradually harder.
+This mode should feel energetic and slightly 3D — letters can move, rotate, or pop dynamically.
+
+2. Trader Quiz
+
+Multiple-choice questions about trading, Solana, and BulkTrade’s architecture.
+Players progress through levels as they answer correctly.
+This mode should feel like an interactive, high-speed quiz terminal.
+
+3. Challenge Mode (60 Seconds)
+
+A fast-paced lightning round where players have 60 seconds to answer as many Bulk-related questions as possible.
+There are no levels here — just pure timed competition.
+When the timer ends, their score is displayed alongside a global leaderboard showing other players’ top results.
+
+Only the Challenge Mode has a leaderboard.
+
+🧾 Game Rules & Data Behavior
+
+A player’s name and device ID are saved locally on their browser.
+
+The system remembers returning players automatically.
+
+Players should also be saved in the database so their information persists across devices and appears in the leaderboard.
+
+Scores should always update only when a player beats their previous high score.
+
+Players can see other people’s scores on the global Challenge leaderboard, which should display each user’s name.
+
+Word Puzzle and Trader Quiz have level systems; Challenge Mode does not.
+
+🎨 Experience
+
+BulkMind should feel like a fusion of a trading dashboard and an arcade game.
+It should look and play beautifully on both phones and desktops.
+The interface must be fast, clean, and immersive — using Phaser.js for interactivity and light 3D effects where necessary (especially for letter animations and transitions).
+
+The tone should be friendly, confident, and exciting — like stepping into a futuristic trading arena.
+
+The BulkTrade logo (attached) should be used tastefully where necessary — such as on the welcome screen, loading screens, or background branding.
+
+⚙️ Core Principles
+
+Use Next.js App Router for structure.
+
+The experience should be modular, scalable, and highly responsive.
+
+Store player names, modes, and scores in a database so that high scores and leaderboards persist.
+
+Implement 3D elements tastefully where they enhance gameplay — for example, rotating letters, layered depth effects, and animated transitions.
+
+Use server-side rendering (SSR) wherever possible for better SEO and performance.
+
+Only use "use client" where it is truly necessary — the majority of components and pages should render server-side.
+
+✨ Goal
+
+Deliver a complete, playable, and engaging game that:
+
+Welcomes first-time users with a name entry screen.
+
+Remembers returning users automatically.
+
+Saves players both locally and in the database.
+
+Offers three distinct modes — Word Puzzle, Trader Quiz, and Challenge Mode.
+
+Updates scores only when new highs are achieved.
+
+Displays a live leaderboard for Challenge Mode using players’ names.
+
+Uses the BulkTrade logo where suitable.
+
+Feels immersive, fluid, and fun on all screen sizes.
