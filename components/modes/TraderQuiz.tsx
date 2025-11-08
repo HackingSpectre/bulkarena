@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { quizQuestions } from "@/lib/gameData";
 
 interface TraderQuizProps {
@@ -174,11 +174,11 @@ export default function TraderQuiz({ playerId, onBack }: TraderQuizProps) {
         {/* Game Over Content */}
         <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
           <div className="game-card text-center max-w-lg w-full">
-            <h1 className="text-5xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
-              Quiz Complete!
+                        <h1 className="text-3xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
+              Game Complete!
             </h1>
-            <p className="text-3xl text-game-milk mb-2">
-              You got <span className="font-gaming font-bold text-green-400">{correctAnswers}</span> out of <span className="font-gaming font-bold">{maxQuestions}</span> correct!
+            <p className="text-2xl text-game-milk mb-2">
+              You scored: <span className="font-gaming font-bold">{correctAnswers}/20</span>
             </p>
             <p className="text-xl text-game-milk/70 mb-8">
               Best Score: <span className="font-gaming font-bold text-game-milk">{Math.max(highScore, correctAnswers)}/20</span>
@@ -233,21 +233,21 @@ export default function TraderQuiz({ playerId, onBack }: TraderQuizProps) {
             <div className="flex items-center space-x-6">
               <div className="text-center">
                 <span className="text-sm text-game-milk/60">Question</span>
-                <div className="text-2xl font-bold text-game-milk font-gaming">{questionsAnswered + 1}/{maxQuestions}</div>
+                <div className="text-xl font-bold text-game-milk font-gaming">{questionsAnswered + 1}/{maxQuestions}</div>
               </div>
               <div className="text-center">
                 <span className="text-sm text-game-milk/60">Correct</span>
-                <div className="text-2xl font-bold text-game-milk font-gaming">{correctAnswers}/{questionsAnswered || 1}</div>
+                <div className="text-xl font-bold text-game-milk font-gaming">{correctAnswers}/{questionsAnswered || 1}</div>
               </div>
               <div className="text-center">
                 <span className="text-sm text-game-milk/60">Best Score</span>
-                <div className="text-2xl font-bold text-game-milk font-gaming">{highScore}/20</div>
+                <div className="text-xl font-bold text-game-milk font-gaming">{highScore}/20</div>
               </div>
             </div>
           </div>
 
           <div className="game-card">
-            <h1 className="text-4xl md:text-6xl font-gaming font-bold text-game-milk mb-8 text-center game-text-glow">
+            <h1 className="text-3xl md:text-4xl font-gaming font-bold text-game-milk mb-8 text-center game-text-glow">
               Trader Quiz
             </h1>
 

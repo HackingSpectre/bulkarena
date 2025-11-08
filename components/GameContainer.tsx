@@ -150,7 +150,7 @@ export default function GameContainer() {
           </div>
           
           {/* Loading text */}
-          <div className="text-2xl md:text-3xl font-gaming font-bold text-game-milk animate-pulse mb-4">
+          <div className="text-xl md:text-2xl font-gaming font-bold text-game-milk animate-pulse mb-4">
             Initializing Arena...
           </div>
           

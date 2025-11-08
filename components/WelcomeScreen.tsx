@@ -36,11 +36,11 @@ export default function WelcomeScreen({ onSubmit }: WelcomeScreenProps) {
               </div>
             </div>
             
-            <h1 className="text-6xl md:text-7xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
+            <h1 className="text-4xl md:text-6xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
               BulkArena
             </h1>
             
-            <p className="text-xl text-game-milk/90 mb-3 font-medium">
+            <p className="text-lg text-game-milk/90 mb-3 font-medium">
               One Exchange, Infinite Markets
             </p>
             

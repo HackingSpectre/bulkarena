@@ -216,8 +216,8 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="game-card">
-                <h1 className="text-4xl font-gaming font-bold text-game-milk mb-6 game-text-glow">
-                  ⚡ Challenge Mode
+                <h1 className="text-3xl font-gaming font-bold text-game-milk mb-6 game-text-glow">
+                  Challenge Mode
                 </h1>
                 <p className="text-game-milk/80 mb-6 text-lg">
                   You have <span className="text-game-milk font-bold font-gaming">60 seconds</span> to answer as many questions as possible!
@@ -250,8 +250,8 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
 
               <div className="game-card">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-gaming font-bold text-game-milk game-text-glow">
-                    🏆My Global Leaderboard
+                                    <h2 className="text-xl font-gaming font-bold text-game-milk game-text-glow">
+                    Leaderboard
                   </h2>
                   <button
                     onClick={fetchLeaderboard}
@@ -311,10 +311,10 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
         {/* Content */}
         <div className="relative z-10 p-4">
           <div className="max-w-2xl w-full game-card text-center">
-            <h1 className="text-5xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
+            <h1 className="text-3xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
               Time&apos;s Up!
             </h1>
-            <p className="text-3xl text-game-milk mb-8">
+            <p className="text-2xl text-game-milk mb-8">
               Final Score: <span className="text-game-milk font-bold font-gaming">{score}</span>
             </p>
             <div className="flex gap-4">
@@ -366,7 +366,7 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
                 </div>
               </div>
             </div>
-            <div className={`text-4xl font-bold font-gaming ${timeLeft <= 10 ? 'text-red-400 animate-pulse' : 'text-game-milk'} game-text-glow`}>
+            <div className={`text-3xl font-bold font-gaming ${timeLeft <= 10 ? 'text-red-400 animate-pulse' : 'text-game-milk'} game-text-glow`}>
               {timeLeft}s
             </div>
           </div>

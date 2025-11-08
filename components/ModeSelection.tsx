@@ -1,7 +1,9 @@
 "use client";
 
 import GameIcon3D from './GameIcon3D';
-import GameBackground from './GameBackground';
+import Image from "next/image";
+import GameBackground from "./GameBackground";
+import ModeSelectionFooter from "./Footer";
 
 interface ModeSelectionProps {
   playerName: string;
@@ -38,10 +40,10 @@ export default function ModeSelection({ playerName, onSelectMode }: ModeSelectio
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="text-center mb-16">
-              <h1 className="text-5xl md:text-7xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
+              <h1 className="text-3xl md:text-5xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
                 Welcome Back
               </h1>
-              <div className="text-2xl md:text-3xl text-game-milk/80 mb-2">
+              <div className="text-xl md:text-2xl text-game-milk/80 mb-2">
                 {playerName}
               </div>
               <p className="text-lg text-game-milk/60">Choose your training arena</p>
@@ -70,7 +72,7 @@ export default function ModeSelection({ playerName, onSelectMode }: ModeSelectio
                       </div>
 
                       {/* Title */}
-                      <h2 className="text-2xl md:text-3xl font-gaming font-bold mb-4 text-game-milk group-hover:game-text-glow transition-all">
+                      <h2 className="text-xl md:text-2xl font-gaming font-bold mb-4 text-game-milk group-hover:game-text-glow transition-all">
                         {mode.title}
                       </h2>
 
@@ -110,6 +112,7 @@ export default function ModeSelection({ playerName, onSelectMode }: ModeSelectio
           </div>
         </div>
       </div>
+      <ModeSelectionFooter />
     </GameBackground>
   );
 }

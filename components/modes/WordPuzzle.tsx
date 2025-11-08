@@ -177,10 +177,10 @@ export default function WordPuzzle({ playerId, onBack }: WordPuzzleProps) {
         {/* Game Over Content */}
         <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
           <div className="game-card text-center max-w-lg w-full">
-            <h1 className="text-5xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
+            <h1 className="text-3xl font-gaming font-bold text-game-milk mb-4 game-text-glow">
               Game Over!
             </h1>
-            <p className="text-2xl text-game-milk mb-2">
+            <p className="text-xl text-game-milk mb-2">
               Final Score: <span className="font-gaming font-bold">{score}</span>
             </p>
             <p className="text-xl text-game-milk/70 mb-8">
@@ -230,15 +230,15 @@ export default function WordPuzzle({ playerId, onBack }: WordPuzzleProps) {
             <div className="flex items-center space-x-6">
               <div className="text-center">
                 <span className="text-sm text-game-milk/60">Score</span>
-                <div className="text-2xl font-bold text-game-milk font-gaming">{score}</div>
+                <div className="text-xl font-bold text-game-milk font-gaming">{score}</div>
               </div>
               <div className="text-center">
                 <span className="text-sm text-game-milk/60">High Score</span>
-                <div className="text-2xl font-bold text-game-milk font-gaming">{highScore}</div>
+                <div className="text-xl font-bold text-game-milk font-gaming">{highScore}</div>
               </div>
               <div className="text-center">
                 <span className="text-sm text-game-milk/60">Time</span>
-                <div className={`text-3xl font-bold font-gaming ${
+                <div className={`text-2xl font-bold font-gaming ${
                   timeLeft <= 3 ? 'text-red-400 animate-pulse' : 'text-game-milk'
                 }`}>
                   {timeLeft}s
@@ -248,7 +248,7 @@ export default function WordPuzzle({ playerId, onBack }: WordPuzzleProps) {
           </div>
 
           <div className="game-card">
-            <h1 className="text-4xl md:text-6xl font-gaming font-bold text-game-milk mb-6 text-center game-text-glow">
+            <h1 className="text-3xl md:text-4xl font-gaming font-bold text-game-milk mb-6 text-center game-text-glow">
               Word Puzzle
             </h1>
 
