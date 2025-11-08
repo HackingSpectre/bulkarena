@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { challengeQuestions } from "@/lib/gameData";
 
 interface ChallengeModeProps {
@@ -45,22 +45,26 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
   */
 
   // Local Storage Implementation for fetchLeaderboard
-  const fetchLeaderboard = () => {
+  const fetchLeaderboard = useCallback(() => {
     try {
-      const stored = localStorage.getItem('bulkmind_challenge_leaderboard');
-      let leaderboardArray: LeaderboardEntry[] = [];
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          leaderboardArray = parsed;
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('bulkmind_challenge_leaderboard');
+        let leaderboardArray: LeaderboardEntry[] = [];
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            leaderboardArray = parsed;
+          }
         }
+        setLeaderboard(leaderboardArray);
+      } else {
+        setLeaderboard([]);
       }
-      setLeaderboard(leaderboardArray);
     } catch (error) {
       console.error("Error loading leaderboard from localStorage:", error);
       setLeaderboard([]);
     }
-  };
+  }, []);
 
   /* COMMENTED OUT DB FETCHING - Original endGame function
   const endGame = async () => {
@@ -93,43 +97,45 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
   */
 
   // Local Storage Implementation for endGame
-  const endGame = () => {
+  const endGame = useCallback(() => {
     setIsGameActive(false);
     setIsGameOver(true);
 
     console.log("Ending game with score:", score, "for player:", playerId);
 
     try {
-      // Get current leaderboard or initialize
-      let leaderboard: LeaderboardEntry[] = [];
-      const stored = localStorage.getItem('bulkmind_challenge_leaderboard');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          leaderboard = parsed;
+      if (typeof window !== 'undefined') {
+        // Get current leaderboard or initialize
+        let leaderboard: LeaderboardEntry[] = [];
+        const stored = localStorage.getItem('bulkmind_challenge_leaderboard');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            leaderboard = parsed;
+          }
         }
+
+        // Add current player's score
+        const playerDisplayName = playerName || `Player ${playerId}`;
+        leaderboard.push({
+          name: playerDisplayName,
+          score: score
+        });
+
+        // Sort by score descending and keep top 10
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard = leaderboard.slice(0, 10);
+
+        // Save updated leaderboard
+        localStorage.setItem('bulkmind_challenge_leaderboard', JSON.stringify(leaderboard));
+
+        // Refresh leaderboard display
+        fetchLeaderboard();
       }
-
-      // Add current player's score
-      const playerDisplayName = playerName || `Player ${playerId}`;
-      leaderboard.push({
-        name: playerDisplayName,
-        score: score
-      });
-
-      // Sort by score descending and keep top 10
-      leaderboard.sort((a, b) => b.score - a.score);
-      leaderboard = leaderboard.slice(0, 10);
-
-      // Save updated leaderboard
-      localStorage.setItem('bulkmind_challenge_leaderboard', JSON.stringify(leaderboard));
-
-      // Refresh leaderboard display
-      fetchLeaderboard();
     } catch (error) {
       console.error("Error saving score to localStorage:", error);
     }
-  };
+  }, [score, playerId, playerName, fetchLeaderboard]);
 
   useEffect(() => {
     fetchLeaderboard();
@@ -245,7 +251,7 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
               <div className="game-card">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-gaming font-bold text-game-milk game-text-glow">
-                    🏆 Global Leaderboard
+                    🏆My Global Leaderboard
                   </h2>
                   <button
                     onClick={fetchLeaderboard}
@@ -256,7 +262,7 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
                 </div>
                 <div className="space-y-3">
                   {leaderboard.length === 0 ? (
-                    <p className="text-game-milk/50 text-center py-8">No scores yet. Be the first!</p>
+                    <p className="text-game-milk/50 text-center py-8">No scores yet.</p>
                   ) : (
                     leaderboard.map((entry, index) => (
                       <div

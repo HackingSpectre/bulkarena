@@ -17,8 +17,8 @@ export default function GameBackground({ children }: GameBackgroundProps) {
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.WEBGL,
       parent: backgroundRef.current,
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: typeof window !== 'undefined' ? window.innerWidth : 800,
+      height: typeof window !== 'undefined' ? window.innerHeight : 600,
       transparent: true,
       scene: {
         create: createScene,
@@ -134,15 +134,19 @@ export default function GameBackground({ children }: GameBackgroundProps) {
 
     // Handle resize
     const handleResize = () => {
-      if (phaserGameRef.current) {
+      if (phaserGameRef.current && typeof window !== 'undefined') {
         phaserGameRef.current.scale.resize(window.innerWidth, window.innerHeight);
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+    }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
       if (phaserGameRef.current) {
         phaserGameRef.current.destroy(true);
         phaserGameRef.current = null;

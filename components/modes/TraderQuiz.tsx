@@ -64,9 +64,11 @@ export default function TraderQuiz({ playerId, onBack }: TraderQuizProps) {
   // Local Storage Implementation for loadHighScore
   const loadHighScore = () => {
     try {
-      const stored = localStorage.getItem('bulkmind_trader_quiz_high_score');
-      if (stored) {
-        setHighScore(parseInt(stored));
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('bulkmind_trader_quiz_high_score');
+        if (stored) {
+          setHighScore(parseInt(stored));
+        }
       }
     } catch (error) {
       console.error("Error loading high score from localStorage:", error);
@@ -97,7 +99,7 @@ export default function TraderQuiz({ playerId, onBack }: TraderQuizProps) {
   const saveHighScore = (score: number) => {
     try {
       // Only save if it's a new high score
-      if (score > highScore) {
+      if (score > highScore && typeof window !== 'undefined') {
         localStorage.setItem('bulkmind_trader_quiz_high_score', score.toString());
         setHighScore(score);
       }

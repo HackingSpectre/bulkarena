@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { wordPuzzles } from "@/lib/gameData";
 import dynamic from "next/dynamic";
 
@@ -30,6 +30,47 @@ export default function WordPuzzle({ playerId, onBack }: WordPuzzleProps) {
     loadHighScore();
   }, []);
 
+  const saveHighScore = useCallback((newScore: number) => {
+    // COMMENTED OUT - Database saving disabled, using localStorage only
+    /*
+    const saveHighScore = async (newScore: number) => {
+      try {
+        await fetch("/api/score", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            playerId,
+            mode: "word-puzzle",
+            score: newScore,
+            level: null,
+          }),
+        });
+        setHighScore(newScore);
+      } catch (error) {
+        console.error("Error saving score:", error);
+      }
+    };
+    */
+    
+    // Save high score to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("bulkmind_word_puzzle_high_score", newScore.toString());
+      setHighScore(newScore);
+      console.log("High score saved to localStorage:", newScore);
+    }
+  }, []);
+
+  const handleTimeUp = useCallback(() => {
+    setIsGameActive(false);
+    setIsGameOver(true);
+    setMessage("⏰ Time's Up! Game Over");
+    
+    // Save final score if it's a high score
+    if (score > highScore) {
+      saveHighScore(score);
+    }
+  }, [score, highScore, saveHighScore]);
+
   // Timer countdown
   useEffect(() => {
     if (isGameActive && timeLeft > 0 && !isGameOver) {
@@ -43,7 +84,7 @@ export default function WordPuzzle({ playerId, onBack }: WordPuzzleProps) {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [timeLeft, isGameActive, isGameOver]);
+  }, [timeLeft, isGameActive, isGameOver, handleTimeUp]);
 
   const loadHighScore = () => {
     // COMMENTED OUT - Database fetching disabled, using localStorage only
@@ -71,49 +112,12 @@ export default function WordPuzzle({ playerId, onBack }: WordPuzzleProps) {
     */
     
     // Load high score from localStorage
-    const stored = localStorage.getItem("bulkmind_word_puzzle_high_score");
-    if (stored) {
-      setHighScore(parseInt(stored, 10));
-    }
-  };
-
-  const handleTimeUp = () => {
-    setIsGameActive(false);
-    setIsGameOver(true);
-    setMessage("⏰ Time's Up! Game Over");
-    
-    // Save final score if it's a high score
-    if (score > highScore) {
-      saveHighScore(score);
-    }
-  };
-
-  const saveHighScore = (newScore: number) => {
-    // COMMENTED OUT - Database saving disabled, using localStorage only
-    /*
-    const saveHighScore = async (newScore: number) => {
-      try {
-        await fetch("/api/score", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            playerId,
-            mode: "word-puzzle",
-            score: newScore,
-            level: null,
-          }),
-        });
-        setHighScore(newScore);
-      } catch (error) {
-        console.error("Error saving score:", error);
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem("bulkmind_word_puzzle_high_score");
+      if (stored) {
+        setHighScore(parseInt(stored, 10));
       }
-    };
-    */
-    
-    // Save high score to localStorage
-    localStorage.setItem("bulkmind_word_puzzle_high_score", newScore.toString());
-    setHighScore(newScore);
-    console.log("High score saved to localStorage:", newScore);
+    }
   };
 
   const nextPuzzle = () => {

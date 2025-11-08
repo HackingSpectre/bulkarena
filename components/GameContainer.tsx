@@ -16,24 +16,35 @@ export default function GameContainer() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedName = localStorage.getItem("bulkmind_player_name");
-    const storedDeviceId = localStorage.getItem("bulkmind_device_id") || generateDeviceId();
-    
-    setDeviceId(storedDeviceId);
-    localStorage.setItem("bulkmind_device_id", storedDeviceId);
-
-    if (storedName) {
-      setPlayerName(storedName);
-      // Comment out database fetching - using localStorage only
-      // fetchOrCreatePlayer(storedName, storedDeviceId);
-      
-      // Generate a consistent playerId from deviceId for localStorage mode
-      const localPlayerId = generateLocalPlayerId(storedDeviceId);
-      setPlayerId(localPlayerId);
+    // Check if we're on the client side
+    if (typeof window === 'undefined') {
       setIsLoading(false);
-    } else {
-      setIsLoading(false);
+      return;
     }
+
+    // Always show loading for 5 seconds when app opens
+    const loadingTimer = setTimeout(() => {
+      const storedName = localStorage.getItem("bulkmind_player_name");
+      const storedDeviceId = localStorage.getItem("bulkmind_device_id") || generateDeviceId();
+      
+      setDeviceId(storedDeviceId);
+      localStorage.setItem("bulkmind_device_id", storedDeviceId);
+
+      if (storedName) {
+        setPlayerName(storedName);
+        // Comment out database fetching - using localStorage only
+        // fetchOrCreatePlayer(storedName, storedDeviceId);
+        
+        // Generate a consistent playerId from deviceId for localStorage mode
+        const localPlayerId = generateLocalPlayerId(storedDeviceId);
+        setPlayerId(localPlayerId);
+      }
+      
+      setIsLoading(false);
+    }, 5000); // 5 second delay
+
+    // Cleanup timer if component unmounts
+    return () => clearTimeout(loadingTimer);
   }, []);
 
   const generateDeviceId = () => {
@@ -90,6 +101,8 @@ export default function GameContainer() {
   */
 
   const handleNameSubmit = async (name: string) => {
+    if (typeof window === 'undefined') return;
+    
     localStorage.setItem("bulkmind_player_name", name);
     setPlayerName(name);
     
@@ -128,7 +141,10 @@ export default function GameContainer() {
                 alt="BulkTrade Logo"
                 width={128}
                 height={128}
-                className="game-text-glow animate-spin-slow"
+                className="animate-spin"
+                style={{
+                  animation: 'spin 2s linear infinite'
+                }}
               />
             </div>
           </div>

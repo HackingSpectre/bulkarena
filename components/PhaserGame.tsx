@@ -18,7 +18,7 @@ export default function PhaserGame({ letters, isCorrect }: PhaserGameProps) {
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.WEBGL,
       parent: gameRef.current,
-      width: Math.min(800, window.innerWidth - 40),
+      width: typeof window !== 'undefined' ? Math.min(800, window.innerWidth - 40) : 800,
       height: 220,
       backgroundColor: '#1E1F23',
       transparent: false,
