@@ -47,11 +47,7 @@ export default function ModeSelectionFooter() {
             </a>
           </div>
           
-          {/* <div className="mt-6 pt-4 border-t border-game-accent/10">
-            <p className="text-sm text-game-milk/60">
-              Connect with dev_spectre for support, feedback, or collaboration
-            </p>
-          </div> */}
+
         </div>
       </div>
     </footer>

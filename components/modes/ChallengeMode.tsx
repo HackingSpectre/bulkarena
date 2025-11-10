@@ -24,6 +24,7 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
   const [shuffledQuestions, setShuffledQuestions] = useState(challengeQuestions);
   const [feedback, setFeedback] = useState<string>("");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const scoreRef = useRef(0); // Add ref to track score without causing re-renders
 
   /* COMMENTED OUT DB FETCHING - Original fetchLeaderboard function
   const fetchLeaderboard = async () => {
@@ -101,7 +102,7 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
     setIsGameActive(false);
     setIsGameOver(true);
 
-    console.log("Ending game with score:", score, "for player:", playerId);
+    console.log("Ending game with score:", scoreRef.current, "for player:", playerId);
 
     try {
       if (typeof window !== 'undefined') {
@@ -115,11 +116,11 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
           }
         }
 
-        // Add current player's score
+        // Add current player's score using ref value
         const playerDisplayName = playerName || `Player ${playerId}`;
         leaderboard.push({
           name: playerDisplayName,
-          score: score
+          score: scoreRef.current
         });
 
         // Sort by score descending and keep top 10
@@ -135,13 +136,14 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
     } catch (error) {
       console.error("Error saving score to localStorage:", error);
     }
-  }, [score, playerId, playerName, fetchLeaderboard]);
+  }, [playerId, playerName, fetchLeaderboard]); // Remove score from dependencies
 
   useEffect(() => {
     fetchLeaderboard();
     setShuffledQuestions([...challengeQuestions].sort(() => Math.random() - 0.5));
-  }, []);
+  }, [fetchLeaderboard]);
 
+  // Separate timer effect - independent of score changes
   useEffect(() => {
     if (isGameActive && timeLeft > 0) {
       timerRef.current = setTimeout(() => {
@@ -160,6 +162,7 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
     setIsGameActive(true);
     setIsGameOver(false);
     setScore(0);
+    scoreRef.current = 0; // Reset score ref
     setTimeLeft(60);
     setCurrentQuestionIndex(0);
     setFeedback("");
@@ -170,13 +173,18 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
     if (!isGameActive) return;
 
     const currentQuestion = shuffledQuestions[currentQuestionIndex];
+    let newScore;
+    
     if (index === currentQuestion.correct) {
-      setScore(score + 100);
+      newScore = score + 100;
+      setScore(newScore);
+      scoreRef.current = newScore; // Keep ref in sync
       setFeedback("+100");
     } else {
       // Deduct 50 points for wrong answer, but don't go below 0
-      const newScore = Math.max(0, score - 50);
+      newScore = Math.max(0, score - 50);
       setScore(newScore);
+      scoreRef.current = newScore; // Keep ref in sync
       setFeedback("-50");
     }
 
@@ -315,7 +323,7 @@ export default function ChallengeMode({ playerId, playerName, onBack }: Challeng
               Time&apos;s Up!
             </h1>
             <p className="text-2xl text-game-milk mb-8">
-              Final Score: <span className="text-game-milk font-bold font-gaming">{score}</span>
+              Final Score: <span className="text-game-milk font-bold font-gaming">{scoreRef.current}</span>
             </p>
             <div className="flex gap-4">
               <button
