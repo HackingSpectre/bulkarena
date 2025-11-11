@@ -2,9 +2,9 @@
 
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 
-export default function AuthError() {
+function AuthErrorContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [error, setError] = useState('')
@@ -89,5 +89,27 @@ export default function AuthError() {
         </div>
       </div>
     </div>
+  )
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-game-black flex items-center justify-center p-4">
+      <div className="game-card max-w-md w-full text-center">
+        <div className="animate-pulse">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-game-milk/20"></div>
+          <div className="h-6 bg-game-milk/20 rounded mb-4"></div>
+          <div className="h-4 bg-game-milk/10 rounded"></div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function AuthError() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <AuthErrorContent />
+    </Suspense>
   )
 }
