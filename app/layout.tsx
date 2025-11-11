@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers/Providers";
 import Header from "@/components/Header";
+import { LoadingProvider } from "@/contexts/LoadingContext";
+import MainWrapper from "@/components/MainWrapper";
 
 export const metadata: Metadata = {
   title: "BulkArena - Learn, Think, Trade Fast",
@@ -21,12 +23,14 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased bg-bulk-dark text-white min-h-screen">
-        <Providers>
-          <Header />
-          <main className="pt-16">
-            {children}
-          </main>
-        </Providers>
+        <LoadingProvider>
+          <Providers>
+            <Header />
+            <MainWrapper>
+              {children}
+            </MainWrapper>
+          </Providers>
+        </LoadingProvider>
       </body>
     </html>
   );

@@ -1,9 +1,16 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
+import { useLoading } from '@/contexts/LoadingContext'
 
 export default function Header() {
   const { isLoggedIn, loginWithX, xUser } = useAuth()
+  const { isAppLoading } = useLoading()
+
+  // Don't render header during app loading
+  if (isAppLoading) {
+    return null
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-game-black/90 backdrop-blur-md border-b border-game-milk/20">

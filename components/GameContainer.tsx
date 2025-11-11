@@ -8,6 +8,7 @@ import DailyQuiz from "./modes/DailyQuiz";
 import WordPuzzle from "./modes/WordPuzzle";
 import TraderQuiz from "./modes/TraderQuiz";
 import ChallengeMode from "./modes/ChallengeMode";
+import { useLoading } from "@/contexts/LoadingContext";
 
 export default function GameContainer() {
   const [playerName, setPlayerName] = useState<string>("");
@@ -15,6 +16,7 @@ export default function GameContainer() {
   const [deviceId, setDeviceId] = useState<string>("");
   const [currentMode, setCurrentMode] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { setAppLoading } = useLoading();
 
   useEffect(() => {
     // Check if we're on the client side
@@ -42,6 +44,7 @@ export default function GameContainer() {
       }
       
       setIsLoading(false);
+      setAppLoading(false); // Also update global loading state
     }, 5000); // 5 second delay
 
     // Cleanup timer if component unmounts
