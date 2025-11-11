@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { Providers } from "@/components/providers/Providers";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "BulkArena - Learn, Think, Trade Fast",
@@ -20,9 +21,12 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased bg-bulk-dark text-white min-h-screen">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <Providers>
+          <Header />
+          <main className="pt-16">
+            {children}
+          </main>
+        </Providers>
       </body>
     </html>
   );

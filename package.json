@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@neondatabase/serverless": "^1.0.2",
+    "@types/next-auth": "^3.13.0",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.6",
     "drizzle-orm": "^0.44.7",

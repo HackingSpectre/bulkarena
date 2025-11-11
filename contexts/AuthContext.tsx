@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { useSession, signIn, signOut } from 'next-auth/react'
 
 interface XUser {
   id: string
@@ -15,7 +16,7 @@ interface AuthContextType {
   isLoggedIn: boolean
   isLoading: boolean
   loginWithX: () => Promise<void>
-  logout: () => void
+  logoutFromX: () => Promise<void>
   showXPrompt: boolean
   setShowXPrompt: (show: boolean) => void
 }
@@ -27,62 +28,82 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const { data: session, status } = useSession()
   const [xUser, setXUser] = useState<XUser | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [showXPrompt, setShowXPrompt] = useState(false)
 
-  // Load saved X account from localStorage
+  const isLoading = status === 'loading'
+
+  // Load saved X account from localStorage or session
   useEffect(() => {
-    const savedUser = localStorage.getItem('bulkmind_x_user')
-    if (savedUser) {
-      try {
-        setXUser(JSON.parse(savedUser))
-      } catch (error) {
-        console.error('Error parsing saved X user:', error)
-        localStorage.removeItem('bulkmind_x_user')
+    if (session?.user) {
+      // User is authenticated via NextAuth - create X user object
+      const xUser: XUser = {
+        id: session.user.id || '',
+        username: session.user.username || session.user.name?.toLowerCase().replace(/\s+/g, '_') || '',
+        name: session.user.name || '',
+        avatarUrl: session.user.image || undefined,
+        isLinked: true
+      }
+      setXUser(xUser)
+      // Save to localStorage for persistence
+      localStorage.setItem('bulkmind_x_user', JSON.stringify(xUser))
+      
+      // Close any open prompts since user is now logged in
+      setShowXPrompt(false)
+    } else {
+      // No active session - check localStorage for saved user
+      const savedUser = localStorage.getItem('bulkmind_x_user')
+      if (savedUser) {
+        try {
+          const parsedUser = JSON.parse(savedUser)
+          // Only use saved user if we don't have a conflicting session
+          if (!session) {
+            setXUser(parsedUser)
+          } else {
+            // Clear stale localStorage data
+            localStorage.removeItem('bulkmind_x_user')
+          }
+        } catch (error) {
+          console.error('Error parsing saved X user:', error)
+          localStorage.removeItem('bulkmind_x_user')
+        }
+      } else {
+        setXUser(null)
       }
     }
-    setIsLoading(false)
-  }, [])
+  }, [session])
 
   const loginWithX = async () => {
     try {
-      setIsLoading(true)
-      
-      // For now, use next-auth signIn
-      // This will redirect to Twitter OAuth
-      const { signIn } = await import('next-auth/react')
-      await signIn('twitter', { callbackUrl: window.location.origin })
-      
+      // Use NextAuth's signIn with proper redirect handling
+      await signIn('twitter', { 
+        callbackUrl: window.location.origin,
+        redirect: true 
+      })
     } catch (error) {
       console.error('Error signing in with X:', error)
-      setIsLoading(false)
+      // Show user-friendly error message
+      alert('Failed to connect with X. Please try again.')
     }
   }
 
-  const logout = () => {
-    setXUser(null)
-    localStorage.removeItem('bulkmind_x_user')
-    
-    // Sign out from next-auth as well
-    import('next-auth/react').then(({ signOut }) => {
-      signOut({ callbackUrl: window.location.origin })
-    })
-  }
-
-  // Save user to localStorage when it changes
-  useEffect(() => {
-    if (xUser) {
-      localStorage.setItem('bulkmind_x_user', JSON.stringify(xUser))
+  const logoutFromX = async () => {
+    try {
+      await signOut({ redirect: false })
+      setXUser(null)
+      localStorage.removeItem('bulkmind_x_user')
+    } catch (error) {
+      console.error('Error signing out:', error)
     }
-  }, [xUser])
+  }
 
   const value: AuthContextType = {
     xUser,
-    isLoggedIn: !!xUser,
+    isLoggedIn: !!xUser && !!session,
     isLoading,
     loginWithX,
-    logout,
+    logoutFromX,
     showXPrompt,
     setShowXPrompt
   }
