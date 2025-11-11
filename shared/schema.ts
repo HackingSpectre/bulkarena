@@ -4,6 +4,11 @@ export const players = pgTable("players", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   deviceId: varchar("device_id", { length: 255 }).notNull().unique(),
+  // Daily quiz streak tracking
+  currentStreak: integer("current_streak").default(0),
+  bestStreak: integer("best_streak").default(0),
+  lastPlayedDate: varchar("last_played_date", { length: 10 }), // YYYY-MM-DD format
+  totalDailyQuizzes: integer("total_daily_quizzes").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

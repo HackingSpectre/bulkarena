@@ -13,6 +13,12 @@ interface ModeSelectionProps {
 export default function ModeSelection({ playerName, onSelectMode }: ModeSelectionProps) {
   const modes = [
     {
+      id: "daily-quiz",
+      title: "Daily Challenge",
+      description: "One question per day • Build your streak and compete with the community",
+      icon: "challenge" as const,
+    },
+    {
       id: "word-puzzle",
       title: "Word Puzzle",
       description: "Unscramble crypto and trading terms to sharpen your knowledge",
@@ -50,7 +56,7 @@ export default function ModeSelection({ playerName, onSelectMode }: ModeSelectio
             </div>
 
             {/* Game mode cards */}
-            <div className="grid lg:grid-cols-3 gap-8 mb-16">
+            <div className="grid lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-16">
               {modes.map((mode, index) => (
                 <div
                   key={mode.id}

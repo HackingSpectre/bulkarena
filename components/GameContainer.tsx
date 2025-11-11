@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import WelcomeScreen from "./WelcomeScreen";
 import ModeSelection from "./ModeSelection";
+import DailyQuiz from "./modes/DailyQuiz";
 import WordPuzzle from "./modes/WordPuzzle";
 import TraderQuiz from "./modes/TraderQuiz";
 import ChallengeMode from "./modes/ChallengeMode";
@@ -180,6 +181,9 @@ export default function GameContainer() {
 
   return (
     <>
+      {currentMode === "daily-quiz" && (
+        <DailyQuiz onBack={handleBackToMenu} />
+      )}
       {currentMode === "word-puzzle" && (
         <WordPuzzle playerId={playerId!} onBack={handleBackToMenu} />
       )}
