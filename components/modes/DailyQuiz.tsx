@@ -239,12 +239,12 @@ export default function DailyQuiz({ onBack }: DailyQuizProps) {
           
           <p className="text-game-milk/70 mb-8">Come back tomorrow for a new question</p>
 
-          <button
+          {/* <button
             onClick={resetForTesting}
             className="game-button-secondary text-sm"
           >
             Reset (Testing)
-          </button>
+          </button> */}
         </div>
       </GameLayout>
     )
